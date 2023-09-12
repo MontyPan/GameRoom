@@ -1,0 +1,39 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" 
+	xmlns:m="urn:import:us.dontcareabout.gameRoom.client.mine">
+	
+	<ui:style type="us.dontcareabout.gameRoom.client.mine.MineMain.MyStyle2" gss="true">
+	.playerInfo{
+		width: 480px;
+	}
+	.cpu{
+		width: 220px;
+		background-color: red;
+	}
+	.player{
+		width: 220px;
+		background-color: #64A0C8;
+	}
+	.remainder{
+		width: 40px;
+		color: white;
+		background-color: gray;
+		text-align: center;
+	}
+	.cpuHit{
+		border: solid red 1px;
+		width: 28px;
+		height: 28px;
+	}
+	</ui:style>
+	
+	<g:VerticalPanel>
+		<g:HorizontalPanel styleName="{style.playerInfo}">
+			<m:PlayerInfo ui:field="cpu" styleName="{style.cpu}" />
+			<g:Label ui:field="remainder" styleName="{style.remainder}" />
+			<m:PlayerInfo ui:field="player" styleName="{style.player}" />
+		</g:HorizontalPanel>
+		<g:FlexTable ui:field="map" />
+	</g:VerticalPanel>
+</ui:UiBinder> 
