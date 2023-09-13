@@ -15,7 +15,7 @@ import com.google.gwt.user.client.ui.Widget;
 import us.dontcareabout.gameRoom.client.mine.ai.DummyAI;
 import us.dontcareabout.gameRoom.client.mine.vo.GameInfo;
 
-public class MineMain extends Composite{
+public class MineMain extends Composite {
 	private MineMainUiBinder uiBinder = GWT.create(MineMainUiBinder.class);
 	interface MineMainUiBinder extends UiBinder<Widget, MineMain> {}
 
@@ -25,23 +25,23 @@ public class MineMain extends Composite{
 
 	@UiField Label remainder;
 	@UiField FlexTable map;
-	@UiField PlayerInfo cpu;
-	@UiField PlayerInfo player;
+	@UiField PlayerInfo p1Info;
+	@UiField PlayerInfo p2Info;
 	@UiField MyStyle2 style;
 
 	private int width = -1;
 	private int height = -1;
 
-	private Player ai = new DummyAI();
+	private Player player2 = new DummyAI();
 	private MineGM server = new MineGM();
 
 	public MineMain() {
 		initWidget(uiBinder.createAndBindUi(this));
-		player.setName("Player");	//FIXME
 		setRemainder(-1);
 		map.setCellSpacing(0);
 		map.setCellPadding(0);
-		cpu.setName(ai.getName());
+		p1Info.setName("Player");	//FIXME
+		p2Info.setName(player2.getName());
 		shoot(width, height);	//Refactory ????
 	}
 
@@ -83,7 +83,7 @@ public class MineMain extends Composite{
 			setShootResult(MineGM.toGameInfo(server));
 		}
 
-		if (!server.shoot(x, y, MineGM.USER)) {
+		if (!server.shoot(x, y, MineGM.PLAYER_1)) {
 			server.cleanTrace();
 			int[] xy;
 
@@ -91,9 +91,9 @@ public class MineMain extends Composite{
 				if (server.getRemainder() == 0){ break; }
 
 				xy = new int[2];
-				ai.guess(MineGM.toGameInfo(server), xy);
+				player2.guess(MineGM.toGameInfo(server), xy);
 				server.addTrace(xy);
-			} while (server.shoot(xy[0], xy[1], MineGM.AI));
+			} while (server.shoot(xy[0], xy[1], MineGM.PLAYER_2));
 		}
 
 		setShootResult(MineGM.toGameInfo(server));
@@ -111,16 +111,16 @@ public class MineMain extends Composite{
 		}
 
 		setRemainder(m.getRemainder());
-		player.setHitCount(m.getPlayerHit()[0]);
-		cpu.setHitCount(m.getPlayerHit()[1]);
+		p1Info.setHitCount(m.getPlayerHit()[0]);
+		p2Info.setHitCount(m.getPlayerHit()[1]);
 
 		if (m.getPlayerHit()[0] >= (m.getTotal()/2.0)) {
-			Window.alert("玩家獲勝");
+			Window.alert("玩家獲勝");	//FIXME
 			Window.open(Window.Location.getHref(), "_self", "");
 		}
 
 		if (m.getPlayerHit()[1] >= (m.getTotal()/2.0)) {
-			Window.alert("Player 獲勝");
+			Window.alert(player2.getName() + " 獲勝");
 			Window.open(Window.Location.getHref(), "_self", "");
 		}
 	}

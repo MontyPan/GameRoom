@@ -30,9 +30,9 @@
 	
 	<g:VerticalPanel>
 		<g:HorizontalPanel styleName="{style.playerInfo}">
-			<m:PlayerInfo ui:field="cpu" styleName="{style.cpu}" />
+			<m:PlayerInfo ui:field="p2Info" styleName="{style.cpu}" />
 			<g:Label ui:field="remainder" styleName="{style.remainder}" />
-			<m:PlayerInfo ui:field="player" styleName="{style.player}" />
+			<m:PlayerInfo ui:field="p1Info" styleName="{style.player}" />
 		</g:HorizontalPanel>
 		<g:FlexTable ui:field="map" />
 	</g:VerticalPanel>

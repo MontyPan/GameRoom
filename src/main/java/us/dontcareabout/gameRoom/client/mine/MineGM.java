@@ -1,16 +1,16 @@
 package us.dontcareabout.gameRoom.client.mine;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
 import us.dontcareabout.gameRoom.client.mine.vo.GameInfo;
 
-public class MineGM implements Serializable{
-	private static final long serialVersionUID = 1L;
+//Refactory magic number 9 / -9
+public class MineGM {
 	public static final int UNKNOW = -1;
-	public static boolean USER = true;
-	public static boolean AI = !USER;
+
+	public static boolean PLAYER_1 = true;
+	public static boolean PLAYER_2 = !PLAYER_1;
 
 	private int width;
 	private int height;
@@ -95,9 +95,6 @@ public class MineGM implements Serializable{
 	}
 
 	/**
-	 * @param hitX
-	 * @param hitY
-	 * @param who 值為 {@value #USER}, {@value #Player}
 	 * @return 是否命中
 	 */
 	public boolean shoot(int hitX, int hitY, boolean who) {
@@ -125,7 +122,7 @@ public class MineGM implements Serializable{
 		//不同人踩到地雷要給不同值
 		if (map[hitX][hitY] == 9) {
 			remainder--;
-			if (who) {
+			if (who == PLAYER_1) {
 				playerHit[0]++;
 			} else {
 				map[hitX][hitY] = -9;
