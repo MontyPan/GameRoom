@@ -93,8 +93,8 @@ public class ConsoleMode {
 				case 0:
 					System.out.print(" ");
 					break;
-				case 9:
-				case -9:
+				case MineGM.IS_MINE:
+				case MineGM.P2_FLAG:
 					System.out.print("*");
 					break;
 				default:

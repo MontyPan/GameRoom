@@ -136,8 +136,8 @@ public class MineMain extends Composite {
 		case 6 : return ImageRS.I.b6();
 		case 7 : return ImageRS.I.b7();
 		case 8 : return ImageRS.I.b8();
-		case 9 : return ImageRS.I.flagBlue();
-		case -9 : return ImageRS.I.flagRed();
+		case MineGM.IS_MINE : return ImageRS.I.flagBlue();
+		case MineGM.P2_FLAG : return ImageRS.I.flagRed();
 		default: return ImageRS.I.unknown();
 		}
 	}

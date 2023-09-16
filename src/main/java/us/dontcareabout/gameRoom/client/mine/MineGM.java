@@ -5,9 +5,21 @@ import java.util.Random;
 
 import us.dontcareabout.gameRoom.client.mine.vo.GameInfo;
 
-//Refactory magic number 9 / -9
 public class MineGM {
+	/**
+	 * {@link #map} 用。還未翻開的格子。
+	 */
 	public static final int UNKNOW = -1;
+
+	/**
+	 * {@link #map} 用。同時也代表 player1 標記的地雷、
+	 */
+	public static final int IS_MINE = 9;
+
+	/**
+	 * {@link #map} 用。player2 標記的地雷。
+	 */
+	public static final int P2_FLAG = -9;
 
 	public static boolean PLAYER_1 = true;
 	public static boolean PLAYER_2 = !PLAYER_1;
@@ -16,7 +28,22 @@ public class MineGM {
 	private int height;
 	private int total;
 	private int remainder;
+
+	/**
+	 * 記錄哪一格是地雷，所以 data type 是 boolean。
+	 */
 	private boolean[][] answer;
+
+	/**
+	 * 記錄玩家看到的地圖狀態。
+	 * 值域包含：
+	 * <ul>
+	 * 	<li>0～8：周圍地雷數</li>
+	 * 	<li>{@link #UNKNOW}</li>
+	 * 	<li>{@link #IS_MINE}</li>
+	 * 	<li>{@link #P2_FLAG}</li>
+	 * </ul>
+	 */
 	private int[][] map;
 	private int[] playerHit = new int[2];
 	private ArrayList<int[]> trace;
@@ -24,7 +51,7 @@ public class MineGM {
 	public MineGM(boolean[][] array) {
 		this.width = array.length;
 		this.height = array[0].length;
-		this.answer = new boolean[this.width+2][this.height+2];
+		this.answer = new boolean[this.width + 2][this.height + 2];
 
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
@@ -61,7 +88,7 @@ public class MineGM {
 
 	private boolean[][] genAnswer() {
 		Random random = new Random();
-		boolean[][] result = new boolean[width+2][height+2];
+		boolean[][] result = new boolean[width + 2][height + 2];
 
 		for(int i = 0; i < total; i++) {
 			int xVal, yVal;
@@ -105,7 +132,7 @@ public class MineGM {
 
 		//踩到空地的連鎖反應
 		if (map[hitX][hitY] == 0) {
-			for (int x=-1; x<2; x++) {
+			for (int x = -1; x < 2; x++) {
 				if (hitX + x == width || hitX + x < 0){ continue; }
 
 				for (int y = -1; y < 2; y++){
@@ -120,30 +147,31 @@ public class MineGM {
 		}
 
 		//不同人踩到地雷要給不同值
-		if (map[hitX][hitY] == 9) {
+		if (map[hitX][hitY] == IS_MINE) {
 			remainder--;
 			if (who == PLAYER_1) {
+				//IS_MINE 也代表 player1 的 flag
 				playerHit[0]++;
 			} else {
-				map[hitX][hitY] = -9;
+				map[hitX][hitY] = P2_FLAG;
 				playerHit[1]++;
 			}
 		}
 
-		return Math.abs(map[hitX][hitY]) == 9;
+		return Math.abs(map[hitX][hitY]) == IS_MINE;
 	}
 
-	private short count(int hitX, int hitY) {
-		if (answer[hitX+1][hitY+1]) { return 9; }
+	private int count(int hitX, int hitY) {
+		if (answer[hitX+1][hitY+1]) { return IS_MINE; }
 
-		short c = 0;
+		int c = 0;
 
 		for (int x = 0; x < 3; x++) {
-			for (int y=0; y<3; y++) {
-				if (x==1 && y==1) {
+			for (int y = 0; y < 3; y++) {
+				if (x == 1 && y == 1) {
 					continue;
 				}
-				if (answer[hitX+x][hitY+y]) {
+				if (answer[hitX + x][hitY + y]) {
 					c++;
 				}
 			}
