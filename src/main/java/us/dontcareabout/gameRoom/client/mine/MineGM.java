@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import us.dontcareabout.gameRoom.client.mine.vo.GameInfo;
+import us.dontcareabout.gameRoom.client.mine.vo.XY;
 
 public class MineGM {
 	/**
@@ -46,7 +47,7 @@ public class MineGM {
 	 */
 	private int[][] map;
 	private int[] playerHit = new int[2];
-	private ArrayList<int[]> trace;
+	private ArrayList<XY> trace;
 
 	public MineGM(boolean[][] array) {
 		this.width = array.length;
@@ -65,7 +66,7 @@ public class MineGM {
 
 		this.remainder = total;
 		this.map = genMap();
-		this.trace = new ArrayList<int[]>();
+		this.trace = new ArrayList<>();
 	}
 
 	public MineGM() {
@@ -79,7 +80,7 @@ public class MineGM {
 		this.remainder=count;
 		this.answer = genAnswer();
 		this.map = genMap();
-		this.trace = new ArrayList<int[]>();
+		this.trace = new ArrayList<>();
 	}
 
 	public boolean[][] getAnswer() {
@@ -124,41 +125,41 @@ public class MineGM {
 	/**
 	 * @return 是否命中
 	 */
-	public boolean shoot(int hitX, int hitY, boolean who) {
-		if (hitX < 0 || hitX >= width || hitY < 0 || hitY >= height) { return false; }
-		if (map[hitX][hitY] != UNKNOW){ return false; }
+	public boolean shoot(XY xy, boolean who) {
+		if (xy.x < 0 || xy.x >= width || xy.y < 0 || xy.y >= height) { return false; }
+		if (map[xy.x][xy.y] != UNKNOW){ return false; }
 
-		map[hitX][hitY] = count(hitX, hitY);
+		map[xy.x][xy.y] = count(xy.x, xy.y);
 
 		//踩到空地的連鎖反應
-		if (map[hitX][hitY] == 0) {
+		if (map[xy.x][xy.y] == 0) {
 			for (int x = -1; x < 2; x++) {
-				if (hitX + x == width || hitX + x < 0){ continue; }
+				if (xy.x + x == width || xy.x + x < 0){ continue; }
 
 				for (int y = -1; y < 2; y++){
-					if (hitY + y == height || hitY + y < 0){ continue; }
-					if (map[hitX + x][hitY + y] != -1) {
+					if (xy.y + y == height || xy.y + y < 0){ continue; }
+					if (map[xy.x + x][xy.y + y] != -1) {
 						continue;
 					} else{
-						shoot(hitX + x, hitY + y, who);
+						shoot(new XY(xy.x + x, xy.y + y), who);
 					}
 				}
 			}
 		}
 
 		//不同人踩到地雷要給不同值
-		if (map[hitX][hitY] == IS_MINE) {
+		if (map[xy.x][xy.y] == IS_MINE) {
 			remainder--;
 			if (who == PLAYER_1) {
 				//IS_MINE 也代表 player1 的 flag
 				playerHit[0]++;
 			} else {
-				map[hitX][hitY] = P2_FLAG;
+				map[xy.x][xy.y] = P2_FLAG;
 				playerHit[1]++;
 			}
 		}
 
-		return Math.abs(map[hitX][hitY]) == IS_MINE;
+		return Math.abs(map[xy.x][xy.y]) == IS_MINE;
 	}
 
 	private int count(int hitX, int hitY) {
@@ -194,7 +195,7 @@ public class MineGM {
 		trace.clear();
 	}
 
-	public void addTrace(int[] xy) {
+	public void addTrace(XY xy) {
 		trace.add(xy);
 	}
 

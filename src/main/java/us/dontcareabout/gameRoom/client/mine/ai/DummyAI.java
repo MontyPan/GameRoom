@@ -5,21 +5,24 @@ import java.util.Random;
 import us.dontcareabout.gameRoom.client.mine.MineGM;
 import us.dontcareabout.gameRoom.client.mine.Player;
 import us.dontcareabout.gameRoom.client.mine.vo.GameInfo;
+import us.dontcareabout.gameRoom.client.mine.vo.XY;
 
 public class DummyAI implements Player {
 	private Random random = new Random();
 
 	@Override
-	public void guess(GameInfo info, int[] xy) {
+	public XY guess(GameInfo info) {
+		int x, y;
 		do {
-			xy[0] = random.nextInt(info.getWidth());
-			xy[1] = random.nextInt(info.getHeight());
-		} while(info.getMap()[xy[0]][xy[1]] != MineGM.UNKNOW);
+			x = random.nextInt(info.getWidth());
+			y = random.nextInt(info.getHeight());
+		} while(info.getMap()[x][y] != MineGM.UNKNOW);
+
+		return new XY(x, y);
 	}
 
 	@Override
 	public String getName() {
 		return "Dummy Yummy";
 	}
-
 }

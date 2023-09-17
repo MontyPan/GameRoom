@@ -14,6 +14,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import us.dontcareabout.gameRoom.client.mine.ai.DummyAI;
 import us.dontcareabout.gameRoom.client.mine.vo.GameInfo;
+import us.dontcareabout.gameRoom.client.mine.vo.XY;
 
 public class MineMain extends Composite {
 	private MineMainUiBinder uiBinder = GWT.create(MineMainUiBinder.class);
@@ -53,14 +54,15 @@ public class MineMain extends Composite {
 
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
-				getBlockAt(x, y).setUrl(mapping(m[x][y]).getSafeUri());
-				getBlockAt(x, y).removeStyleName(style.cpuHit());
+				Image block = getBlockAt(new XY(x, y));
+				block.setUrl(mapping(m[x][y]).getSafeUri());
+				block.removeStyleName(style.cpuHit());
 			}
 		}
 	}
 
-	private Image getBlockAt(int x, int y) {
-		return (Image)map.getWidget(y, x);
+	private Image getBlockAt(XY xy) {
+		return (Image)map.getWidget(xy.y, xy.x);
 	}
 
 	private void initMap(int[][] m) {
@@ -83,17 +85,16 @@ public class MineMain extends Composite {
 			setShootResult(MineGM.toGameInfo(server));
 		}
 
-		if (!server.shoot(x, y, MineGM.PLAYER_1)) {
+		if (!server.shoot(new XY(x, y), MineGM.PLAYER_1)) {
 			server.cleanTrace();
-			int[] xy;
+			XY xy;
 
 			do{
 				if (server.getRemainder() == 0){ break; }
 
-				xy = new int[2];
-				player2.guess(MineGM.toGameInfo(server), xy);
+				xy = player2.guess(MineGM.toGameInfo(server));
 				server.addTrace(xy);
-			} while (server.shoot(xy[0], xy[1], MineGM.PLAYER_2));
+			} while (server.shoot(xy, MineGM.PLAYER_2));
 		}
 
 		setShootResult(MineGM.toGameInfo(server));
@@ -106,8 +107,8 @@ public class MineMain extends Composite {
 	public void setShootResult(GameInfo m) {
 		setMap(m.getMap());
 
-		for(int[] xy : m.getTrace()) {
-			getBlockAt(xy[0], xy[1]).addStyleName(style.cpuHit());
+		for(XY xy : m.getTrace()) {
+			getBlockAt(xy).addStyleName(style.cpuHit());
 		}
 
 		setRemainder(m.getRemainder());

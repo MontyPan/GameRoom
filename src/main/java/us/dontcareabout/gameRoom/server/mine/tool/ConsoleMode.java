@@ -6,6 +6,7 @@ import us.dontcareabout.gameRoom.client.mine.MineGM;
 import us.dontcareabout.gameRoom.client.mine.Player;
 import us.dontcareabout.gameRoom.client.mine.ai.DummyAI;
 import us.dontcareabout.gameRoom.client.mine.vo.GameInfo;
+import us.dontcareabout.gameRoom.client.mine.vo.XY;
 
 public class ConsoleMode {
 	private static final Scanner scanner = new Scanner(System.in);
@@ -15,7 +16,7 @@ public class ConsoleMode {
 
 		MineGM gm = new MineGM();
 		GameInfo result;
-		int[] xy;
+		XY xy;
 
 		do {
 			do {
@@ -25,23 +26,25 @@ public class ConsoleMode {
 					System.exit(0);	//暴力結束 \囧/
 				}
 				show(result);
-			} while(gm.shoot(read("x (0~" + (result.getWidth() - 1) + ") : "),
-					read("y (0~" + (result.getHeight() - 1) + ") : "), MineGM.PLAYER_1));
+				xy = new XY(
+					read("x (0~" + (result.getWidth() - 1) + ") : "),
+					read("y (0~" + (result.getHeight() - 1) + ") : ")
+				);
+			} while(gm.shoot(xy, MineGM.PLAYER_1));
 
 			gm.cleanTrace();
 
 			do {
-				xy = new int[2];
-				ai.guess(MineGM.toGameInfo(gm), xy);
+				xy = ai.guess(MineGM.toGameInfo(gm));
 				gm.addTrace(xy);
-			} while(gm.shoot(xy[0], xy[1], MineGM.PLAYER_2));
+			} while(gm.shoot(xy, MineGM.PLAYER_2));
 
 			//顯示 Player 踩了哪些
 			result = MineGM.toGameInfo(gm);
 			System.out.print("Player : ");
 
-			for (int[] trace : result.getTrace()) {
-				System.out.print("(" + trace[0] + "," + trace[1] + "), ");
+			for (XY trace : result.getTrace()) {
+				System.out.print("(" + trace.x + "," + trace.y + "), ");
 			}
 
 			System.out.println("\n========================");

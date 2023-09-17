@@ -32,13 +32,13 @@ public class GameInfo {
 	/**
 	 * 存放電腦踩了哪些點，int[0] 為 x 座標、int[1] 為 y 座標
 	 */
-	private ArrayList<int[]> trace;
+	private ArrayList<XY> trace;
 
-	public ArrayList<int[]> getTrace() {
+	public ArrayList<XY> getTrace() {
 		return trace;
 	}
 
-	public void setTrace(ArrayList<int[]> trace) {
+	public void setTrace(ArrayList<XY> trace) {
 		this.trace = trace;
 	}
 
