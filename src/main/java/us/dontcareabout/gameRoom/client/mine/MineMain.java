@@ -16,6 +16,7 @@ import us.dontcareabout.gameRoom.client.mine.ai.DummyAI;
 import us.dontcareabout.gameRoom.client.mine.vo.GameInfo;
 import us.dontcareabout.gameRoom.client.mine.vo.XY;
 
+//Refactory 還是要假裝有 server
 public class MineMain extends Composite {
 	private MineMainUiBinder uiBinder = GWT.create(MineMainUiBinder.class);
 	interface MineMainUiBinder extends UiBinder<Widget, MineMain> {}
@@ -30,50 +31,31 @@ public class MineMain extends Composite {
 	@UiField PlayerInfo p2Info;
 	@UiField MyStyle2 style;
 
-	private int width = -1;
-	private int height = -1;
-
 	private Player player2 = new DummyAI();
 	private MineGM server = new MineGM();
 
 	public MineMain() {
 		initWidget(uiBinder.createAndBindUi(this));
-		setRemainder(-1);
 		map.setCellSpacing(0);
 		map.setCellPadding(0);
 		p1Info.setName("Player");	//FIXME
 		p2Info.setName(player2.getName());
-		shoot(width, height);	//Refactory ????
-	}
 
-	private void setMap(int[][] m) {
-		//懶得先傳 x, y 的大小，所以用這招來限定
-		if ((width == -1 || height == -1)) {
-			initMap(m);
-		}
-
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
-				Image block = getBlockAt(new XY(x, y));
-				block.setUrl(mapping(m[x][y]).getSafeUri());
-				block.removeStyleName(style.cpuHit());
-			}
-		}
+		GameInfo info = MineGM.toGameInfo(server);
+		initMap(info.getWidth(), info.getHeight());
+		refresh(info);
 	}
 
 	private Image getBlockAt(XY xy) {
 		return (Image)map.getWidget(xy.y, xy.x);
 	}
 
-	private void initMap(int[][] m) {
-		height=m[0].length;	//XXX 應該改成 GameInfo.getHeight() 的....
-		width=m.length;
-
+	private void initMap(int width, int height) {
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
 				int tmpX = x;
 				int tmpY = y;
-				Image image = new Image(mapping(-1));
+				Image image = new Image(mapping(MineGM.UNKNOW));
 				image.addClickHandler(e -> shoot(tmpX, tmpY));
 				map.setWidget(tmpY, tmpX, image);
 			}
@@ -81,10 +63,6 @@ public class MineMain extends Composite {
 	}
 
 	private void shoot(int x, int y) {
-		if (x == -1 || y == -1 || server.getMap()[x][y] != -1) {
-			setShootResult(MineGM.toGameInfo(server));
-		}
-
 		if (!server.shoot(new XY(x, y), MineGM.PLAYER_1)) {
 			server.cleanTrace();
 			XY xy;
@@ -97,30 +75,35 @@ public class MineMain extends Composite {
 			} while (server.shoot(xy, MineGM.PLAYER_2));
 		}
 
-		setShootResult(MineGM.toGameInfo(server));
+		refresh(MineGM.toGameInfo(server));
 	}
 
-	public void setRemainder(Integer value) {
-		remainder.setText("" + value);
-	}
+	private void refresh(GameInfo info) {
+		int[][] map = info.getMap();
 
-	public void setShootResult(GameInfo m) {
-		setMap(m.getMap());
+		//地圖
+		for (int y = 0; y < info.getHeight(); y++) {
+			for (int x = 0; x < info.getWidth(); x++) {
+				Image block = getBlockAt(new XY(x, y));
+				block.setUrl(mapping(map[x][y]).getSafeUri());
+				block.removeStyleName(style.cpuHit());
+			}
+		}
 
-		for(XY xy : m.getTrace()) {
+		for(XY xy : info.getTrace()) {
 			getBlockAt(xy).addStyleName(style.cpuHit());
 		}
 
-		setRemainder(m.getRemainder());
-		p1Info.setHitCount(m.getPlayerHit()[0]);
-		p2Info.setHitCount(m.getPlayerHit()[1]);
+		remainder.setText("" + info.getRemainder());
+		p1Info.setHitCount(info.getPlayerHit()[0]);
+		p2Info.setHitCount(info.getPlayerHit()[1]);
 
-		if (m.getPlayerHit()[0] >= (m.getTotal()/2.0)) {
+		if (info.getPlayerHit()[0] >= (info.getTotal()/2.0)) {
 			Window.alert("玩家獲勝");	//FIXME
 			Window.open(Window.Location.getHref(), "_self", "");
 		}
 
-		if (m.getPlayerHit()[1] >= (m.getTotal()/2.0)) {
+		if (info.getPlayerHit()[1] >= (info.getTotal()/2.0)) {
 			Window.alert(player2.getName() + " 獲勝");
 			Window.open(Window.Location.getHref(), "_self", "");
 		}
