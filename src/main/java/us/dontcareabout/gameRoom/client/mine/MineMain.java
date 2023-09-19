@@ -41,7 +41,7 @@ public class MineMain extends Composite {
 		p1Info.setName("Player");	//FIXME
 		p2Info.setName(player2.getName());
 
-		GameInfo info = MineGM.toGameInfo(server);
+		GameInfo info = server.getGameInfo();
 		initMap(info.getWidth(), info.getHeight());
 		refresh(info);
 	}
@@ -70,12 +70,12 @@ public class MineMain extends Composite {
 			do{
 				if (server.getRemainder() == 0){ break; }
 
-				xy = player2.guess(MineGM.toGameInfo(server));
+				xy = player2.guess(server.getGameInfo());
 				server.addTrace(xy);
 			} while (server.shoot(xy, MineGM.PLAYER_2));
 		}
 
-		refresh(MineGM.toGameInfo(server));
+		refresh(server.getGameInfo());
 	}
 
 	private void refresh(GameInfo info) {

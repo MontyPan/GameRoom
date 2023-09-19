@@ -181,13 +181,13 @@ public class MineGM {
 		return c;
 	}
 
-	public static GameInfo toGameInfo(MineGM server) {
+	public GameInfo getGameInfo() {
 		GameInfo result = new GameInfo();
-		result.setMap(server.getMap());
-		result.setRemainder(server.remainder);
-		result.setTotal(server.total);
-		result.setPlayerHit(server.playerHit);
-		result.setTrace(server.trace);
+		result.setMap(getMap());	//FIXME 同一個 instance
+		result.setRemainder(remainder);
+		result.setTotal(total);
+		result.setPlayerHit(playerHit);
+		result.setTrace(trace);
 		return result;
 	}
 

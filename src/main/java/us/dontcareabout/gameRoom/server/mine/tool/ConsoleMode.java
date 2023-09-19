@@ -20,7 +20,7 @@ public class ConsoleMode {
 
 		do {
 			do {
-				result = MineGM.toGameInfo(gm);
+				result = gm.getGameInfo();
 				if(result.getPlayerHit()[0] >= (result.getTotal() / 2.0)) {
 					System.out.println("Player win!");
 					System.exit(0);	//暴力結束 \囧/
@@ -35,12 +35,12 @@ public class ConsoleMode {
 			gm.cleanTrace();
 
 			do {
-				xy = ai.guess(MineGM.toGameInfo(gm));
+				xy = ai.guess(gm.getGameInfo());
 				gm.addTrace(xy);
 			} while(gm.shoot(xy, MineGM.PLAYER_2));
 
 			//顯示 Player 踩了哪些
-			result = MineGM.toGameInfo(gm);
+			result = gm.getGameInfo();
 			System.out.print("Player : ");
 
 			for (XY trace : result.getTrace()) {
