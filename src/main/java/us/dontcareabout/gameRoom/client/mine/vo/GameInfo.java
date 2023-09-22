@@ -2,6 +2,8 @@ package us.dontcareabout.gameRoom.client.mine.vo;
 
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import us.dontcareabout.gameRoom.client.mine.MineGM;
 
 public class GameInfo {
@@ -74,10 +76,12 @@ public class GameInfo {
 		this.playerHit = playerHit;
 	}
 
+	@JsonIgnore
 	public int getWidth() {
 		return map.length;
 	}
 
+	@JsonIgnore
 	public int getHeight() {
 		return map[0].length;
 	}
