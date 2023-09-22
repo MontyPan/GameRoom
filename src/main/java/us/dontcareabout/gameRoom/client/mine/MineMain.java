@@ -12,11 +12,9 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
-import us.dontcareabout.gameRoom.client.mine.ai.DummyAI;
 import us.dontcareabout.gameRoom.client.mine.vo.GameInfo;
 import us.dontcareabout.gameRoom.client.mine.vo.XY;
 
-//Refactory 還是要假裝有 server
 public class MineMain extends Composite {
 	private MineMainUiBinder uiBinder = GWT.create(MineMainUiBinder.class);
 	interface MineMainUiBinder extends UiBinder<Widget, MineMain> {}
@@ -31,19 +29,20 @@ public class MineMain extends Composite {
 	@UiField PlayerInfo p2Info;
 	@UiField MyStyle2 style;
 
-	private Player player2 = new DummyAI();
-	private MineGM server = new MineGM();
-
 	public MineMain() {
 		initWidget(uiBinder.createAndBindUi(this));
 		map.setCellSpacing(0);
 		map.setCellPadding(0);
 		p1Info.setName("Player");	//FIXME
-		p2Info.setName(player2.getName());
+		p2Info.setName("AI");	//FIXME
 
-		GameInfo info = server.getGameInfo();
-		initMap(info.getWidth(), info.getHeight());
-		refresh(info);
+		GM.addGameStart(e -> {
+			initMap(e.data.getWidth(), e.data.getHeight());
+			refresh(e.data);
+		});
+		GM.addGameMove(e -> refresh(e.data));
+
+		GM.start();	//FIXME
 	}
 
 	private Image getBlockAt(XY xy) {
@@ -63,19 +62,7 @@ public class MineMain extends Composite {
 	}
 
 	private void shoot(int x, int y) {
-		if (!server.shoot(new XY(x, y), MineGM.PLAYER_1)) {
-			server.cleanTrace();
-			XY xy;
-
-			do{
-				if (server.getRemainder() == 0){ break; }
-
-				xy = player2.guess(server.getGameInfo());
-				server.addTrace(xy);
-			} while (server.shoot(xy, MineGM.PLAYER_2));
-		}
-
-		refresh(server.getGameInfo());
+		GM.move(MineGM.PLAYER_1, new XY(x, y));
 	}
 
 	private void refresh(GameInfo info) {
@@ -104,7 +91,7 @@ public class MineMain extends Composite {
 		}
 
 		if (info.getPlayerHit()[1] >= (info.getTotal()/2.0)) {
-			Window.alert(player2.getName() + " 獲勝");
+			Window.alert("AI 獲勝");	//FIXME
 			Window.open(Window.Location.getHref(), "_self", "");
 		}
 	}
