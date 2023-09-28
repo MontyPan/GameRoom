@@ -47,25 +47,6 @@ public class MineGM {
 	private int[][] map;
 	private int[] playerHit = new int[2];
 
-	public MineGM(boolean[][] array) {
-		this.width = array.length;
-		this.height = array[0].length;
-		this.answer = new boolean[this.width + 2][this.height + 2];
-
-		for (int x = 0; x < width; x++) {
-			for (int y = 0; y < height; y++) {
-				answer[x + 1][y + 1] = array[x][y];
-
-				if (array[x][y]) {
-					total++;
-				}
-			}
-		}
-
-		this.remainder = total;
-		this.map = genMap();
-	}
-
 	public MineGM() {
 		this(16, 16, 51);
 	}
@@ -77,10 +58,6 @@ public class MineGM {
 		this.remainder=count;
 		this.answer = genAnswer();
 		this.map = genMap();
-	}
-
-	public boolean[][] getAnswer() {
-		return this.answer;
 	}
 
 	private boolean[][] genAnswer() {
@@ -111,11 +88,6 @@ public class MineGM {
 		}
 
 		return result;
-	}
-
-
-	public int[][] getMap() {
-		return map;
 	}
 
 	/**
@@ -180,14 +152,10 @@ public class MineGM {
 
 	public GameInfo getGameInfo() {
 		GameInfo result = new GameInfo();
-		result.setMap(getMap());
+		result.setMap(map);	//雖然不應該把 instance 給出去，不過這裡相信 GM 不會亂搞 XD
 		result.setRemainder(remainder);
 		result.setTotal(total);
 		result.setPlayerHit(playerHit);
 		return result;
-	}
-
-	public int getRemainder() {
-		return this.remainder;
 	}
 }

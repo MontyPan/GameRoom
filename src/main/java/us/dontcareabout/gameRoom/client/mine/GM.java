@@ -37,7 +37,7 @@ public class GM {
 
 			//TODO AI 也改成呼叫 move()
 			do{
-				if (rule.getRemainder() == 0){ break; }
+				if (rule.getGameInfo().getRemainder() == 0){ break; }
 
 				foo = player2.guess(cloneGameInfo());
 			} while (rule.shoot(foo, MineGM.PLAYER_2));
