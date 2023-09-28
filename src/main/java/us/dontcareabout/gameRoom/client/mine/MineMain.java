@@ -77,9 +77,9 @@ public class MineMain extends Composite {
 			}
 		}
 
-		for(XY xy : info.getTrace()) {
-			getBlockAt(xy).addStyleName(style.cpuHit());
-		}
+//		for(XY xy : info.getTrace()) {
+//			getBlockAt(xy).addStyleName(style.cpuHit());
+//		}
 
 		remainder.setText("" + info.getRemainder());
 		p1Info.setHitCount(info.getPlayerHit()[0]);

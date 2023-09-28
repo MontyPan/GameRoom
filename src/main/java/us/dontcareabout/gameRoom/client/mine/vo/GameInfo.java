@@ -1,7 +1,5 @@
 package us.dontcareabout.gameRoom.client.mine.vo;
 
-import java.util.ArrayList;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import us.dontcareabout.gameRoom.client.mine.MineGM;
@@ -30,19 +28,6 @@ public class GameInfo {
 	 * int[0] 為玩家，int[1] 為 Player。{@link MineGM#shoot(int, int, boolean)}
 	 */
 	private int[] playerHit = new int[2];
-
-	/**
-	 * 存放電腦踩了哪些點，int[0] 為 x 座標、int[1] 為 y 座標
-	 */
-	private ArrayList<XY> trace;
-
-	public ArrayList<XY> getTrace() {
-		return trace;
-	}
-
-	public void setTrace(ArrayList<XY> trace) {
-		this.trace = trace;
-	}
 
 	public int[] getPlayerHit() {
 		return playerHit;

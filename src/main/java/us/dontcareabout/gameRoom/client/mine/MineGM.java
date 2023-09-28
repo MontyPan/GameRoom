@@ -1,6 +1,5 @@
 package us.dontcareabout.gameRoom.client.mine;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import us.dontcareabout.gameRoom.client.mine.vo.GameInfo;
@@ -47,7 +46,6 @@ public class MineGM {
 	 */
 	private int[][] map;
 	private int[] playerHit = new int[2];
-	private ArrayList<XY> trace;
 
 	public MineGM(boolean[][] array) {
 		this.width = array.length;
@@ -66,7 +64,6 @@ public class MineGM {
 
 		this.remainder = total;
 		this.map = genMap();
-		this.trace = new ArrayList<>();
 	}
 
 	public MineGM() {
@@ -80,7 +77,6 @@ public class MineGM {
 		this.remainder=count;
 		this.answer = genAnswer();
 		this.map = genMap();
-		this.trace = new ArrayList<>();
 	}
 
 	public boolean[][] getAnswer() {
@@ -126,6 +122,7 @@ public class MineGM {
 	 * @return 是否命中
 	 */
 	public boolean shoot(XY xy, boolean who) {
+		//TODO 應該要炸 exception 才合理
 		if (xy.x < 0 || xy.x >= width || xy.y < 0 || xy.y >= height) { return false; }
 		if (map[xy.x][xy.y] != UNKNOW){ return false; }
 
@@ -183,20 +180,11 @@ public class MineGM {
 
 	public GameInfo getGameInfo() {
 		GameInfo result = new GameInfo();
-		result.setMap(getMap());	//FIXME 同一個 instance
+		result.setMap(getMap());
 		result.setRemainder(remainder);
 		result.setTotal(total);
 		result.setPlayerHit(playerHit);
-		result.setTrace(trace);
 		return result;
-	}
-
-	public void cleanTrace() {
-		trace.clear();
-	}
-
-	public void addTrace(XY xy) {
-		trace.add(xy);
 	}
 
 	public int getRemainder() {

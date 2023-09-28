@@ -32,20 +32,13 @@ public class ConsoleMode {
 				);
 			} while(gm.shoot(xy, MineGM.PLAYER_1));
 
-			gm.cleanTrace();
-
 			do {
 				xy = ai.guess(gm.getGameInfo());
-				gm.addTrace(xy);
 			} while(gm.shoot(xy, MineGM.PLAYER_2));
 
 			//顯示 Player 踩了哪些
 			result = gm.getGameInfo();
 			System.out.print("Player : ");
-
-			for (XY trace : result.getTrace()) {
-				System.out.print("(" + trace.x + "," + trace.y + "), ");
-			}
 
 			System.out.println("\n========================");
 		} while(result.getPlayerHit()[1] < (result.getTotal() / 2.0));

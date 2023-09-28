@@ -33,7 +33,6 @@ public class GM {
 
 	public static void move(boolean who, XY xy) {
 		if (!rule.shoot(xy, who)) {
-			rule.cleanTrace();
 			XY foo;
 
 			//TODO AI 也改成呼叫 move()
@@ -41,7 +40,6 @@ public class GM {
 				if (rule.getRemainder() == 0){ break; }
 
 				foo = player2.guess(cloneGameInfo());
-				rule.addTrace(foo);
 			} while (rule.shoot(foo, MineGM.PLAYER_2));
 		}
 
