@@ -28,6 +28,7 @@ public class MineGM {
 	private int height;
 	private int total;
 	private int remainder;
+	private int nowIndex;
 
 	/**
 	 * 記錄哪一格是地雷，所以 data type 是 boolean。
@@ -155,6 +156,7 @@ public class MineGM {
 		result.setMap(map);	//雖然不應該把 instance 給出去，不過這裡相信 GM 不會亂搞 XD
 		result.setRemainder(remainder);
 		result.setTotal(total);
+		result.setNowIndex(nowIndex);
 		result.setPlayerHit(playerHit);
 		return result;
 	}

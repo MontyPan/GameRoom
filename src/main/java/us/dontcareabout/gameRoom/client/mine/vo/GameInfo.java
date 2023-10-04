@@ -9,6 +9,12 @@ public class GameInfo {
 	private int remainder;
 
 	/**
+	 * 目前輪到的玩家 index
+	 */
+	//XXX 目前不需要，但是以 AGB 來說應該要開成 List<Integer> 來處理多個玩家均可行動
+	private int nowIndex;
+
+	/**
 	 * 玩家 or Player 可以看到的地圖資訊。
 	 * {@link MineGM#UNKNOW} 表示還沒人踩過的區域。
 	 * 0～8 表示九宮格內有的地雷數、9 表示玩家踩到的地雷、-9 表示 Player 踩到的地雷。
@@ -55,6 +61,18 @@ public class GameInfo {
 
 	public int getRemainder() {
 		return remainder;
+	}
+
+	public int getNowIndex() {
+		return nowIndex;
+	}
+
+	public void setNowIndex(int nowIndex) {
+		this.nowIndex = nowIndex;
+	}
+
+	public boolean isMyTurn(int myIndex) {
+		return myIndex == nowIndex;
 	}
 
 	public void setPlayerHit(int[] playerHit) {
