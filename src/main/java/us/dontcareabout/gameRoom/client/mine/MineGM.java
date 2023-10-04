@@ -21,9 +21,6 @@ public class MineGM {
 	 */
 	public static final int P2_FLAG = -9;
 
-	public static boolean PLAYER_1 = true;
-	public static boolean PLAYER_2 = !PLAYER_1;
-
 	private int width;
 	private int height;
 	private int total;
@@ -94,7 +91,7 @@ public class MineGM {
 	/**
 	 * @return 是否命中
 	 */
-	public boolean shoot(XY xy, boolean who) {
+	public boolean shoot(int index, XY xy) {
 		//TODO 應該要炸 exception 才合理
 		if (xy.x < 0 || xy.x >= width || xy.y < 0 || xy.y >= height) { return false; }
 		if (map[xy.x][xy.y] != UNKNOW){ return false; }
@@ -111,7 +108,7 @@ public class MineGM {
 					if (map[xy.x + x][xy.y + y] != -1) {
 						continue;
 					} else{
-						shoot(new XY(xy.x + x, xy.y + y), who);
+						shoot(index, new XY(xy.x + x, xy.y + y));
 					}
 				}
 			}
@@ -120,12 +117,12 @@ public class MineGM {
 		//不同人踩到地雷要給不同值
 		if (map[xy.x][xy.y] == IS_MINE) {
 			remainder--;
-			if (who == PLAYER_1) {
+			playerHit[index]++;
+
+			if (index == 1) {
 				//IS_MINE 也代表 player1 的 flag
-				playerHit[0]++;
-			} else {
+				//所以只有 player2 要重給值
 				map[xy.x][xy.y] = P2_FLAG;
-				playerHit[1]++;
 			}
 		}
 

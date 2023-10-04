@@ -30,11 +30,11 @@ public class ConsoleMode {
 					read("x (0~" + (result.getWidth() - 1) + ") : "),
 					read("y (0~" + (result.getHeight() - 1) + ") : ")
 				);
-			} while(gm.shoot(xy, MineGM.PLAYER_1));
+			} while(gm.shoot(0, xy));
 
 			do {
 				xy = ai.guess(gm.getGameInfo());
-			} while(gm.shoot(xy, MineGM.PLAYER_2));
+			} while(gm.shoot(1, xy));
 
 			//顯示 Player 踩了哪些
 			result = gm.getGameInfo();

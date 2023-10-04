@@ -62,7 +62,7 @@ public class MineMain extends Composite {
 	}
 
 	private void shoot(int x, int y) {
-		GM.move(MineGM.PLAYER_1, new XY(x, y));
+		GM.move(0, new XY(x, y));
 	}
 
 	private void refresh(GameInfo info) {

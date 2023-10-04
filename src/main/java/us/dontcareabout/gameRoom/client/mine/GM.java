@@ -31,8 +31,8 @@ public class GM {
 		return eventBus.addHandler(GameStartEvent.TYPE, handler);
 	}
 
-	public static void move(boolean who, XY xy) {
-		if (!rule.shoot(xy, who)) {
+	public static void move(int index, XY xy) {
+		if (!rule.shoot(index, xy)) {
 			XY foo;
 
 			//TODO AI 也改成呼叫 move()
@@ -40,7 +40,7 @@ public class GM {
 				if (rule.getGameInfo().getRemainder() == 0){ break; }
 
 				foo = player2.guess(cloneGameInfo());
-			} while (rule.shoot(foo, MineGM.PLAYER_2));
+			} while (rule.shoot(1, foo));	//XXX 只是過度時期 magic number，重點是 L38
 		}
 
 		eventBus.fireEvent(new GameMoveEvent(cloneGameInfo()));
