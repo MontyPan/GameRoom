@@ -3,7 +3,10 @@ package us.dontcareabout.gameRoom.client.mine.ai;
 import us.dontcareabout.gameRoom.client.mine.vo.GameInfo;
 import us.dontcareabout.gameRoom.client.mine.vo.XY;
 
-public class DummyAI implements JavaAI {
+public class DummyAI extends JavaAI {
+	public DummyAI(int index) {
+		super(index);
+	}
 
 	@Override
 	public XY guess(GameInfo info) {

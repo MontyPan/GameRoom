@@ -12,7 +12,7 @@ public class ConsoleMode {
 	private static final Scanner scanner = new Scanner(System.in);
 
 	public static void main(String[] args) {
-		Player ai = new DummyAI();	//FIXME change your Player here!!
+		Player ai = new DummyAI(1);	//FIXME change your Player here!!
 
 		MineGM gm = new MineGM();
 		GameInfo result;

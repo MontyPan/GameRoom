@@ -20,7 +20,7 @@ public class GM {
 	private static final SimpleEventBus eventBus = new SimpleEventBus();
 
 	private static MineGM rule;
-	private static Player player2 = new DummyAI();
+	private static Player player2 = new DummyAI(1);
 
 	public static void start() {	//TODO 依起始參數開局
 		rule = new MineGM();

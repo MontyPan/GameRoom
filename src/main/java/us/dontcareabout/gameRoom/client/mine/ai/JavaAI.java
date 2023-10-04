@@ -2,7 +2,16 @@ package us.dontcareabout.gameRoom.client.mine.ai;
 
 import us.dontcareabout.gameRoom.client.mine.Player;
 
-public interface JavaAI extends Player {
+public abstract class JavaAI implements Player {
+	public final int index;
+
+	public JavaAI(int index) {
+		this.index = index;
+	}
+
 	@Override
-	default Type type() { return Type.Java; }
+	public final int getIndex() { return index; }
+
+	@Override
+	public	final Type type() { return Type.Java; }
 }
