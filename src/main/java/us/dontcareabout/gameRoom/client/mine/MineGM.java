@@ -88,31 +88,20 @@ public class MineGM {
 		return result;
 	}
 
+	public boolean isYourTurn(int index) {
+		return nowIndex == index;
+	}
+
 	/**
 	 * @return 是否命中
 	 */
+	//XXX 不考慮 ConsoleMode 的話，回傳值似乎不必要了...
 	public boolean shoot(int index, XY xy) {
 		//TODO 應該要炸 exception 才合理
 		if (xy.x < 0 || xy.x >= width || xy.y < 0 || xy.y >= height) { return false; }
 		if (map[xy.x][xy.y] != UNKNOW){ return false; }
 
-		map[xy.x][xy.y] = count(xy.x, xy.y);
-
-		//踩到空地的連鎖反應
-		if (map[xy.x][xy.y] == 0) {
-			for (int x = -1; x < 2; x++) {
-				if (xy.x + x == width || xy.x + x < 0){ continue; }
-
-				for (int y = -1; y < 2; y++){
-					if (xy.y + y == height || xy.y + y < 0){ continue; }
-					if (map[xy.x + x][xy.y + y] != -1) {
-						continue;
-					} else{
-						shoot(index, new XY(xy.x + x, xy.y + y));
-					}
-				}
-			}
-		}
+		count(xy.x, xy.y);
 
 		//不同人踩到地雷要給不同值
 		if (map[xy.x][xy.y] == IS_MINE) {
@@ -126,26 +115,43 @@ public class MineGM {
 			}
 		}
 
-		return Math.abs(map[xy.x][xy.y]) == IS_MINE;
+		boolean result = Math.abs(map[xy.x][xy.y]) == IS_MINE;
+		if (!result) {
+			nowIndex = (nowIndex + 1) % 2;
+		}
+		return result;
 	}
 
-	private int count(int hitX, int hitY) {
-		if (answer[hitX+1][hitY+1]) { return IS_MINE; }
+	private void count(int hitX, int hitY) {
+		if (answer[hitX+1][hitY+1]) {
+			map[hitX][hitY] = IS_MINE;
+			return;
+		}
 
-		int c = 0;
+		map[hitX][hitY] = 0;
 
 		for (int x = 0; x < 3; x++) {
 			for (int y = 0; y < 3; y++) {
-				if (x == 1 && y == 1) {
-					continue;
-				}
+				if (x == 1 && y == 1) { continue; }
 				if (answer[hitX + x][hitY + y]) {
-					c++;
+					map[hitX][hitY]++;
 				}
 			}
 		}
 
-		return c;
+		//踩到空地的連鎖反應
+		if (map[hitX][hitY] == 0) {
+			for (int x = -1; x < 2; x++) {
+				if (hitX + x == width || hitX + x < 0){ continue; }
+
+				for (int y = -1; y < 2; y++){
+					if (hitY + y == height || hitY + y < 0){ continue; }
+					if (map[hitX + x][hitY + y] != UNKNOW) { continue; }
+
+					count(hitX + x, hitY + y);
+				}
+			}
+		}
 	}
 
 	public GameInfo getGameInfo() {

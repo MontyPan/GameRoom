@@ -8,6 +8,7 @@ import us.dontcareabout.gameRoom.client.mine.ai.DummyAI;
 import us.dontcareabout.gameRoom.client.mine.vo.GameInfo;
 import us.dontcareabout.gameRoom.client.mine.vo.XY;
 
+//FIXME 因為 JavaAI 用了純 GWT 的 code 而無法執行..... Orz
 public class ConsoleMode {
 	private static final Scanner scanner = new Scanner(System.in);
 

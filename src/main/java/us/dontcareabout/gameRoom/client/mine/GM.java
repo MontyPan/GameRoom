@@ -32,17 +32,9 @@ public class GM {
 	}
 
 	public static void move(int index, XY xy) {
-		if (!rule.shoot(index, xy)) {
-			XY foo;
+		if (!rule.isYourTurn(index)) { return; }	//TODO 炸 exception？
 
-			//TODO AI 也改成呼叫 move()
-			do{
-				if (rule.getGameInfo().getRemainder() == 0){ break; }
-
-				foo = player2.guess(cloneGameInfo());
-			} while (rule.shoot(1, foo));	//XXX 只是過度時期 magic number，重點是 L38
-		}
-
+		rule.shoot(index, xy);
 		eventBus.fireEvent(new GameMoveEvent(cloneGameInfo()));
 	}
 
