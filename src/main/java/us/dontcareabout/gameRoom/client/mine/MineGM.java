@@ -92,6 +92,10 @@ public class MineGM {
 		return nowIndex == index;
 	}
 
+	public boolean isEnd() {
+		return playerHit[0] >= total / 2.0 || playerHit[1] >= total / 2.0;
+	}
+
 	/**
 	 * @return 是否命中
 	 */
