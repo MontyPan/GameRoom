@@ -6,6 +6,8 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.SimpleEventBus;
 
 import us.dontcareabout.gameRoom.client.mine.ai.DummyAI;
+import us.dontcareabout.gameRoom.client.mine.event.GameEndEvent;
+import us.dontcareabout.gameRoom.client.mine.event.GameEndEvent.GameEndHandler;
 import us.dontcareabout.gameRoom.client.mine.event.GameMoveEvent;
 import us.dontcareabout.gameRoom.client.mine.event.GameMoveEvent.GameMoveHandler;
 import us.dontcareabout.gameRoom.client.mine.event.GameStartEvent;
@@ -35,11 +37,15 @@ public class GM {
 		if (!rule.isYourTurn(index)) { return; }	//TODO 炸 exception？
 
 		rule.shoot(index, xy);
-		eventBus.fireEvent(new GameMoveEvent(cloneGameInfo()));
+		eventBus.fireEvent(rule.isEnd() ? new GameEndEvent(cloneGameInfo()) : new GameMoveEvent(cloneGameInfo()));
 	}
 
 	public static HandlerRegistration addGameMove(GameMoveHandler handler) {
 		return eventBus.addHandler(GameMoveEvent.TYPE, handler);
+	}
+
+	public static HandlerRegistration addGameEnd(GameEndHandler handler) {
+		return eventBus.addHandler(GameEndEvent.TYPE, handler);
 	}
 
 	private static GameInfo cloneGameInfo() {

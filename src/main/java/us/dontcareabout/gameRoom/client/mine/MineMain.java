@@ -41,6 +41,10 @@ public class MineMain extends Composite {
 			refresh(e.data);
 		});
 		GM.addGameMove(e -> refresh(e.data));
+		GM.addGameEnd(e -> {
+			refresh(e.data);
+			ending(e.data);
+		});
 
 		GM.start();	//FIXME
 	}
@@ -84,7 +88,9 @@ public class MineMain extends Composite {
 		remainder.setText("" + info.getRemainder());
 		p1Info.setHitCount(info.getPlayerHit()[0]);
 		p2Info.setHitCount(info.getPlayerHit()[1]);
+	}
 
+	private void ending(GameInfo info) {
 		if (info.getPlayerHit()[0] >= (info.getTotal()/2.0)) {
 			Window.alert("玩家獲勝");	//FIXME
 			Window.open(Window.Location.getHref(), "_self", "");

@@ -13,6 +13,7 @@ public abstract class JavaAI implements Player {
 		this.index = index;
 		GM.addGameStart(e -> start(e.data));
 		GM.addGameMove(e -> move(e.data));
+		//game end 不用處理
 	}
 
 	protected void start(GameInfo data) {}
