@@ -3,7 +3,7 @@ package us.dontcareabout.gameRoom.client.mine.ai;
 import us.dontcareabout.gameRoom.client.mine.vo.GameInfo;
 import us.dontcareabout.gameRoom.client.mine.vo.XY;
 
-public class DummyAI extends JavaAI {
+public class DummyAI extends AiPlayer {
 	public DummyAI(int index) {
 		super(index);
 	}
