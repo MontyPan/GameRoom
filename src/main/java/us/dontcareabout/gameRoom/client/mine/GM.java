@@ -5,6 +5,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.SimpleEventBus;
 
+import us.dontcareabout.gameRoom.client.mine.ai.AiPlayer;
 import us.dontcareabout.gameRoom.client.mine.ai.DummyAI;
 import us.dontcareabout.gameRoom.client.mine.event.GameEndEvent;
 import us.dontcareabout.gameRoom.client.mine.event.GameEndEvent.GameEndHandler;
@@ -22,7 +23,7 @@ public class GM {
 	private static final SimpleEventBus eventBus = new SimpleEventBus();
 
 	private static MineGM rule;
-	private static Player player2 = new DummyAI(1);
+	private static Player player2 = new AiPlayer(new DummyAI(), 1);
 
 	public static void start() {	//TODO 依起始參數開局
 		rule = new MineGM();

@@ -5,11 +5,14 @@ import com.google.gwt.core.client.Scheduler;
 import us.dontcareabout.gameRoom.client.mine.GM;
 import us.dontcareabout.gameRoom.client.mine.Player;
 import us.dontcareabout.gameRoom.client.mine.vo.GameInfo;
+import us.dontcareabout.gameRoom.client.mine.vo.XY;
 
-public abstract class AiPlayer implements Player {
+public class AiPlayer implements Player {
 	public final int index;
+	private final JavaAI ai;
 
-	public AiPlayer(int index) {
+	public AiPlayer(JavaAI ai, int index) {
+		this.ai = ai;
 		this.index = index;
 		GM.addGameStart(e -> start(e.data));
 		GM.addGameMove(e -> move(e.data));
@@ -37,4 +40,14 @@ public abstract class AiPlayer implements Player {
 
 	@Override
 	public	final Type type() { return Type.Java; }
+
+	@Override
+	public String getName() {
+		return ai.name();
+	}
+
+	@Override
+	public XY guess(GameInfo info) {
+		return ai.guess(info);
+	}
 }
