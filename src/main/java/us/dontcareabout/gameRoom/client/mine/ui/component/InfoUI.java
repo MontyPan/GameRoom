@@ -28,8 +28,8 @@ public class InfoUI extends HorizontalLayoutLayer {
 
 	public void refresh(GameInfo info) {
 		//FIXME
-		player0.setText("AI : " + info.getPlayerHit()[1]);
+		player0.setText("Player : " + info.getPlayerHit()[0]);
 		remainder.setText("" + info.getRemainder());
-		player1.setText("Player : " + info.getPlayerHit()[0]);
+		player1.setText("AI : " + info.getPlayerHit()[1]);
 	}
 }
