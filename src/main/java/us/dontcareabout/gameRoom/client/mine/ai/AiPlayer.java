@@ -5,7 +5,7 @@ import com.google.gwt.core.client.Scheduler;
 import us.dontcareabout.gameRoom.client.mine.GM;
 import us.dontcareabout.gameRoom.client.mine.Player;
 import us.dontcareabout.gameRoom.client.mine.vo.GameInfo;
-import us.dontcareabout.gameRoom.client.mine.vo.GameSetting;
+import us.dontcareabout.gameRoom.client.mine.vo.StartInfo;
 import us.dontcareabout.gameRoom.client.mine.vo.XY;
 
 public class AiPlayer implements Player {
@@ -25,7 +25,7 @@ public class AiPlayer implements Player {
 		//game end 不用處理
 	}
 
-	protected void start(GameInfo data) {}
+	protected void start(StartInfo data) {}
 
 	protected void move(GameInfo data) {
 		if (!data.isMyTurn(index)) { return; }

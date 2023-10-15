@@ -6,6 +6,7 @@ import us.dontcareabout.gameRoom.client.mine.GM;
 import us.dontcareabout.gameRoom.client.mine.ui.component.InfoUI;
 import us.dontcareabout.gameRoom.client.mine.ui.component.MapUI;
 import us.dontcareabout.gameRoom.client.mine.vo.GameInfo;
+import us.dontcareabout.gameRoom.client.mine.vo.StartInfo;
 import us.dontcareabout.gxt.client.draw.LayerContainer;
 import us.dontcareabout.gxt.client.draw.layout.VerticalLayoutLayer;
 
@@ -29,7 +30,7 @@ public class BoardView extends LayerContainer {
 		root.resize(width, height);
 	}
 
-	private void init(GameInfo data) {
+	private void init(StartInfo data) {
 		clear();
 		info = new InfoUI(data);
 		map = new MapUI(data.getWidth(), data.getHeight());
