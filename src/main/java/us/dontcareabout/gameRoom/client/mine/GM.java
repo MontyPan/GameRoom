@@ -1,5 +1,7 @@
 package us.dontcareabout.gameRoom.client.mine;
 
+import java.util.Arrays;
+
 import com.github.nmorel.gwtjackson.client.ObjectMapper;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -25,7 +27,7 @@ public class GM {
 	private static final SimpleEventBus eventBus = new SimpleEventBus();
 
 	private static MineGM rule;
-	private static AiPlayer ai = new AiPlayer(new DummyAI(), 1);
+	private static AiPlayer ai = new AiPlayer(new DummyAI());
 	private static String[] playerId;
 
 	public static void start() {	//TODO 依起始參數開局
@@ -41,13 +43,16 @@ public class GM {
 		setting.setPlayerId(playerId);
 
 		eventBus.fireEvent(new GameStartEvent(setting));
+		eventBus.fireEvent(new GameMoveEvent(cloneGameInfo()));
 	}
 
 	public static HandlerRegistration addGameStart(GameStartHandler handler) {
 		return eventBus.addHandler(GameStartEvent.TYPE, handler);
 	}
 
-	public static void move(int index, XY xy) {
+	public static void move(String id, XY xy) {
+		int index = Arrays.asList(playerId).indexOf(id);
+
 		if (!rule.isYourTurn(index)) { return; }	//TODO 炸 exception？
 
 		rule.shoot(index, xy);

@@ -27,7 +27,7 @@ public class MapUI extends VerticalLayoutLayer {
 			for (int x = 0; x < width; x++) {
 				map[y][x] = new Block(new LImageSprite(ImageRS.I.unknown()));
 				XY xy = new XY(x, y);	//lambda 裡頭得是常數
-				map[y][x].addSpriteSelectionHandler(e -> GM.move(0, xy));	//TODO magic number
+				map[y][x].addSpriteSelectionHandler(e -> GM.move(BoardView.ID, xy));
 				hll.addChild(map[y][x], BoardView.BLOCK_SIZE);
 			}
 		}
