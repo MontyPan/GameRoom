@@ -1,5 +1,7 @@
 package us.dontcareabout.gameRoom.client.mine.ui;
 
+import java.util.Arrays;
+
 import com.google.gwt.user.client.Window;
 
 import us.dontcareabout.gameRoom.client.mine.GM;
@@ -14,9 +16,13 @@ public class BoardView extends LayerContainer {
 	public static final String ID = "ClientPlayer";
 	public static final int BLOCK_SIZE = 32;
 
+	private static final String player = "Player";
+
 	private VerticalLayoutLayer root = new VerticalLayoutLayer();
 	private MapUI map;
 	private InfoUI info;
+
+	private final String[] name = {player, player};
 
 	public BoardView() {
 		GM.addGameStart(e -> init(e.data));
@@ -32,7 +38,12 @@ public class BoardView extends LayerContainer {
 
 	private void init(StartInfo data) {
 		clear();
-		info = new InfoUI(data);
+
+		String[] playerId = data.getPlayerId();
+		int aiIndex = playerId[0].equals(BoardView.ID) ? 1 : 0;
+		name[aiIndex] = playerId[aiIndex];
+
+		info = new InfoUI(Arrays.asList(playerId), data.getWidth(), data.getTotal());
 		map = new MapUI(data.getWidth(), data.getHeight());
 		root.addChild(info, 36);
 		root.addChild(map, 1);
@@ -47,14 +58,7 @@ public class BoardView extends LayerContainer {
 	}
 
 	private void ending(GameInfo info) {
-		if (info.getPlayerHit()[0] >= (info.getTotal()/2.0)) {
-			Window.alert("玩家獲勝");	//FIXME
-			Window.open(Window.Location.getHref(), "_self", "");
-		}
-
-		if (info.getPlayerHit()[1] >= (info.getTotal()/2.0)) {
-			Window.alert("AI 獲勝");	//FIXME
-			Window.open(Window.Location.getHref(), "_self", "");
-		}
+		int winner = info.getPlayerHit()[0] > info.getPlayerHit()[1] ? 0 : 1;
+		Window.alert(name[winner] + " 獲勝");
 	}
 }
