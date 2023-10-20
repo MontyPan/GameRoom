@@ -2,6 +2,7 @@ package us.dontcareabout.gameRoom.client.mine.ui;
 
 import java.util.Arrays;
 
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.user.client.Window;
 
 import us.dontcareabout.gameRoom.client.mine.GM;
@@ -68,5 +69,7 @@ public class BoardView extends LayerContainer {
 	private void ending(GameInfo info) {
 		int winner = info.getPlayerHit()[0] > info.getPlayerHit()[1] ? 0 : 1;
 		Window.alert(name[winner] + " 獲勝");
+		//（疑似）因為還在同一個 event flow 當中，所以得用 finally 大法
+		Scheduler.get().scheduleFinally(() -> GM.start());
 	}
 }

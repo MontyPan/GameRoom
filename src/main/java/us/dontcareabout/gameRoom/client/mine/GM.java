@@ -34,6 +34,8 @@ public class GM {
 	private static String[] playerId;
 
 	public static void start() {
+		if (ai != null) { ai.destroy(); }
+
 		rule = new MineGM(setting.getWidth(), setting.getHeight(), setting.getTotal());
 		ai = new AiPlayer(AiRoster.gen(setting.getAi()));
 		playerId = new String[] {BoardView.ID, BoardView.ID};
