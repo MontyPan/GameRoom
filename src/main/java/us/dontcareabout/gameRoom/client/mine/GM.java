@@ -8,7 +8,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.SimpleEventBus;
 
 import us.dontcareabout.gameRoom.client.mine.ai.AiPlayer;
-import us.dontcareabout.gameRoom.client.mine.ai.DummyAI;
+import us.dontcareabout.gameRoom.client.mine.ai.AiRoster;
 import us.dontcareabout.gameRoom.client.mine.event.GameEndEvent;
 import us.dontcareabout.gameRoom.client.mine.event.GameEndEvent.GameEndHandler;
 import us.dontcareabout.gameRoom.client.mine.event.GameMoveEvent;
@@ -17,6 +17,7 @@ import us.dontcareabout.gameRoom.client.mine.event.GameStartEvent;
 import us.dontcareabout.gameRoom.client.mine.event.GameStartEvent.GameStartHandler;
 import us.dontcareabout.gameRoom.client.mine.ui.BoardView;
 import us.dontcareabout.gameRoom.client.mine.vo.GameInfo;
+import us.dontcareabout.gameRoom.client.mine.vo.Setting;
 import us.dontcareabout.gameRoom.client.mine.vo.StartInfo;
 import us.dontcareabout.gameRoom.client.mine.vo.XY;
 
@@ -26,23 +27,25 @@ public class GM {
 
 	private static final SimpleEventBus eventBus = new SimpleEventBus();
 
+	public static Setting setting = new Setting();
+
 	private static MineGM rule;
-	private static AiPlayer ai = new AiPlayer(new DummyAI());
+	private static AiPlayer ai;
 	private static String[] playerId;
 
-	public static void start() {	//TODO 依起始參數開局
-		rule = new MineGM();
-		playerId = new String[] {BoardView.ID, ai.getName()};
+	public static void start() {
+		rule = new MineGM(setting.getWidth(), setting.getHeight(), setting.getTotal());
+		ai = new AiPlayer(AiRoster.gen(setting.getAi()));
+		playerId = new String[] {BoardView.ID, BoardView.ID};
+		playerId[setting.isFirst() ? 1 : 0] = ai.getName();
 
-		//XXX 過渡寫法，之後直接從參數組就好了 XD
-		GameInfo info = rule.getGameInfo();
-		StartInfo setting = new StartInfo();
-		setting.setTotal(info.getTotal());
-		setting.setWidth(info.getWidth());
-		setting.setHeight(info.getHeight());
-		setting.setPlayerId(playerId);
+		StartInfo startInfo = new StartInfo();
+		startInfo.setTotal(setting.getTotal());
+		startInfo.setWidth(setting.getWidth());
+		startInfo.setHeight(setting.getHeight());
+		startInfo.setPlayerId(playerId);
 
-		eventBus.fireEvent(new GameStartEvent(setting));
+		eventBus.fireEvent(new GameStartEvent(startInfo));
 		eventBus.fireEvent(new GameMoveEvent(cloneGameInfo()));
 	}
 
