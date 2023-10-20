@@ -17,13 +17,14 @@ public class BoardView extends LayerContainer {
 	public static final String ID = "ClientPlayer";
 	public static final int BLOCK_SIZE = 32;
 
+	private static final int infoHeight = 36;
 	private static final String player = "Player";
 
 	private VerticalLayoutLayer root = new VerticalLayoutLayer();
 	private MapUI map;
 	private InfoUI info;
 
-	private final String[] name = {player, player};
+	private String[] name;
 
 	public BoardView() {
 		GM.addGameStart(e -> init(e.data));
@@ -39,19 +40,20 @@ public class BoardView extends LayerContainer {
 	private void init(StartInfo data) {
 		clear();
 
+		name = new String[]{player, player};
 		String[] playerId = data.getPlayerId();
 		int aiIndex = playerId[0].equals(BoardView.ID) ? 1 : 0;
 		name[aiIndex] = playerId[aiIndex];
 
-		info = new InfoUI(Arrays.asList(playerId), data.getWidth(), data.getTotal());
+		info = new InfoUI(Arrays.asList(name), data.getWidth(), data.getTotal());
 		map = new MapUI(data.getWidth(), data.getHeight());
 		root = new VerticalLayoutLayer();
-		root.addChild(info, 36);
+		root.addChild(info, infoHeight);
 		root.addChild(map, 1);
 		addLayer(root);
 
-		int width = data.getWidth() * BLOCK_SIZE;
-		int height = data.getHeight() * BLOCK_SIZE + 40; //Refactory magic number with L48
+		int width = Math.max(data.getWidth(), 10) * BLOCK_SIZE;
+		int height = data.getHeight() * BLOCK_SIZE + infoHeight + 4;
 		if (width == getOffsetWidth() && height == getOffsetHeight()) {
 			adjustMember(width, height);	//沒改變大小就自己觸發 resize 流程
 		} else {
