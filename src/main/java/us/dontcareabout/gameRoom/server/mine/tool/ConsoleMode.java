@@ -3,8 +3,8 @@ package us.dontcareabout.gameRoom.server.mine.tool;
 import java.util.Scanner;
 
 import us.dontcareabout.gameRoom.client.mine.MineGM;
-import us.dontcareabout.gameRoom.client.mine.Player;
 import us.dontcareabout.gameRoom.client.mine.ai.DummyAI;
+import us.dontcareabout.gameRoom.client.mine.ai.JavaAI;
 import us.dontcareabout.gameRoom.client.mine.vo.GameInfo;
 import us.dontcareabout.gameRoom.client.mine.vo.XY;
 
@@ -13,7 +13,7 @@ public class ConsoleMode {
 	private static final Scanner scanner = new Scanner(System.in);
 
 	public static void main(String[] args) {
-		Player ai = new DummyAI(1);	//FIXME change your Player here!!
+		JavaAI ai = new DummyAI();	//FIXME change your Player here!!
 
 		MineGM gm = new MineGM();
 		GameInfo result;

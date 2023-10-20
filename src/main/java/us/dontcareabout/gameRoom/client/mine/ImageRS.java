@@ -4,7 +4,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 
-interface ImageRS extends ClientBundle {
+public interface ImageRS extends ClientBundle {
 	static ImageRS I = GWT.create(ImageRS.class);
 
 	ImageResource b0();

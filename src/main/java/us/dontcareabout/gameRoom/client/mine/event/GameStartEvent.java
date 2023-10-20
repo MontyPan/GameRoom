@@ -3,13 +3,13 @@ package us.dontcareabout.gameRoom.client.mine.event;
 import com.google.gwt.event.shared.EventHandler;
 
 import us.dontcareabout.gameRoom.client.mine.event.GameStartEvent.GameStartHandler;
-import us.dontcareabout.gameRoom.client.mine.vo.GameInfo;
+import us.dontcareabout.gameRoom.client.mine.vo.StartInfo;
 import us.dontcareabout.gwt.client.data.DataEvent;
 
-public class GameStartEvent extends DataEvent<GameInfo, GameStartHandler> {
+public class GameStartEvent extends DataEvent<StartInfo, GameStartHandler> {
 	public static final Type<GameStartHandler> TYPE = new Type<GameStartHandler>();
 
-	public GameStartEvent(GameInfo data) {
+	public GameStartEvent(StartInfo data) {
 		super(data);
 	}
 
