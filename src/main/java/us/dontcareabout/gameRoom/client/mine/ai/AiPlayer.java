@@ -3,6 +3,7 @@ package us.dontcareabout.gameRoom.client.mine.ai;
 import java.util.Arrays;
 
 import com.google.gwt.core.client.Scheduler;
+import com.sencha.gxt.core.shared.event.GroupingHandlerRegistration;
 
 import us.dontcareabout.gameRoom.client.mine.GM;
 import us.dontcareabout.gameRoom.client.mine.Player;
@@ -17,13 +18,13 @@ public class AiPlayer implements Player {
 	private final JavaAI ai;
 
 	private int index;
+	private GroupingHandlerRegistration hr = new GroupingHandlerRegistration();
 
 	public AiPlayer(JavaAI ai) {
 		this.ai = ai;
 		this.aiId = ai.name() + "-" + (idSerial++);
-		GM.addGameStart(e -> start(e.data));
-		GM.addGameMove(e -> move(e.data));
-		//game end 不用處理
+		hr.add(GM.addGameStart(e -> start(e.data)));
+		hr.add(GM.addGameMove(e -> move(e.data)));
 	}
 
 	protected void start(StartInfo data) {
@@ -42,6 +43,10 @@ public class AiPlayer implements Player {
 			},
 			500
 		);
+	}
+
+	public void destroy() {
+		hr.removeHandler();
 	}
 
 	@Override
