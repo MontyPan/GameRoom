@@ -28,7 +28,6 @@ public class BoardView extends LayerContainer {
 		GM.addGameStart(e -> init(e.data));
 		GM.addGameMove(e -> refresh(e.data));
 		GM.addGameEnd(e -> ending(e.data));
-		GM.start();
 	}
 
 	@Override
@@ -45,9 +44,18 @@ public class BoardView extends LayerContainer {
 
 		info = new InfoUI(Arrays.asList(playerId), data.getWidth(), data.getTotal());
 		map = new MapUI(data.getWidth(), data.getHeight());
+		root = new VerticalLayoutLayer();
 		root.addChild(info, 36);
 		root.addChild(map, 1);
 		addLayer(root);
+
+		int width = data.getWidth() * BLOCK_SIZE;
+		int height = data.getHeight() * BLOCK_SIZE + 40; //Refactory magic number with L48
+		if (width == getOffsetWidth() && height == getOffsetHeight()) {
+			adjustMember(width, height);	//沒改變大小就自己觸發 resize 流程
+		} else {
+			setPixelSize(width, height);
+		}
 		redrawSurface();
 	}
 
