@@ -48,7 +48,7 @@ public class GM {
 		startInfo.setPlayerId(playerId);
 
 		eventBus.fireEvent(new GameStartEvent(startInfo));
-		eventBus.fireEvent(new GameMoveEvent(cloneGameInfo()));
+		eventBus.fireEvent(new GameMoveEvent(rule.getGameInfo()));
 	}
 
 	public static HandlerRegistration addGameStart(GameStartHandler handler) {
@@ -61,7 +61,7 @@ public class GM {
 		if (!rule.isYourTurn(index)) { return; }	//TODO 炸 exception？
 
 		rule.shoot(index, xy);
-		eventBus.fireEvent(rule.isEnd() ? new GameEndEvent(cloneGameInfo()) : new GameMoveEvent(cloneGameInfo()));
+		eventBus.fireEvent(rule.isEnd() ? new GameEndEvent(rule.getGameInfo()) : new GameMoveEvent(rule.getGameInfo()));
 	}
 
 	public static HandlerRegistration addGameMove(GameMoveHandler handler) {
@@ -72,8 +72,8 @@ public class GM {
 		return eventBus.addHandler(GameEndEvent.TYPE, handler);
 	}
 
-	private static GameInfo cloneGameInfo() {
-		String json = gameInfoMapper.write(rule.getGameInfo());
+	public static GameInfo copy(GameInfo data) {
+		String json = gameInfoMapper.write(data);
 		return gameInfoMapper.read(json);
 	}
 }
