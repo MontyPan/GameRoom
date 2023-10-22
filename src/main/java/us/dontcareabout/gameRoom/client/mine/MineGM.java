@@ -160,11 +160,23 @@ public class MineGM {
 
 	public GameInfo getGameInfo() {
 		GameInfo result = new GameInfo();
-		result.setMap(map);	//雖然不應該把 instance 給出去，不過這裡相信 GM 不會亂搞 XD
+		result.setMap(copy(map));
 		result.setRemainder(remainder);
 		result.setTotal(total);
 		result.setNowIndex(nowIndex);
 		result.setPlayerHit(playerHit);
+		return result;
+	}
+
+	private static int[][] copy(int[][] target) {
+		int[][] result = new int[target.length][];
+		for (int i = 0; i < target.length; i++) {
+			result[i] = new int[target[i].length];
+
+			for (int i2 = 0; i2 < target[i].length; i2++) {
+				result[i][i2] = target[i][i2];
+			}
+		}
 		return result;
 	}
 }
