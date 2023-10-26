@@ -6,12 +6,11 @@ import com.google.gwt.core.client.Scheduler;
 import com.sencha.gxt.core.shared.event.GroupingHandlerRegistration;
 
 import us.dontcareabout.gameRoom.client.mine.GM;
-import us.dontcareabout.gameRoom.client.mine.Player;
 import us.dontcareabout.gameRoom.client.mine.vo.GameInfo;
 import us.dontcareabout.gameRoom.client.mine.vo.StartInfo;
 import us.dontcareabout.gameRoom.client.mine.vo.XY;
 
-public class AiPlayer implements Player {
+public class AiPlayer {
 	private static int idSerial = 0;
 
 	private final String aiId;
@@ -65,18 +64,10 @@ public class AiPlayer implements Player {
 		hr.removeHandler();
 	}
 
-	@Override
-	public final int getIndex() { return index; }
-
-	@Override
-	public	final Type type() { return Type.Java; }
-
-	@Override
 	public String getName() {
 		return aiId;
 	}
 
-	@Override
 	public XY guess(GameInfo info) {
 		return ai.guess(info);
 	}
