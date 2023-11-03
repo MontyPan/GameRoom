@@ -1,5 +1,6 @@
 package us.dontcareabout.gameRoom.server.mine.tool;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 import us.dontcareabout.gameRoom.client.mine.MineGM;
@@ -18,7 +19,7 @@ public class ConsoleMode {
 	private static JavaAI ai = new DummyAI();
 
 	public static void main(String[] args) {
-		MineGM gm = new MineGM();
+		MineGM gm = new MineGM(Arrays.asList("Player", ai.name()));
 		GameInfo result;
 		XY xy;
 

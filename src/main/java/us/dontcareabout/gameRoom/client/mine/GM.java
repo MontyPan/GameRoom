@@ -36,10 +36,10 @@ public class GM {
 	public static void start() {
 		if (ai != null) { ai.destroy(); }
 
-		rule = new MineGM(setting.getWidth(), setting.getHeight(), setting.getTotal());
 		ai = new AiPlayer(AiRoster.gen(setting.getAi()));
 		playerId = new String[] {BoardView.ID, BoardView.ID};
 		playerId[setting.isFirst() ? 1 : 0] = ai.getName();
+		rule = new MineGM(Arrays.asList(playerId), setting.getWidth(), setting.getHeight(), setting.getTotal());
 
 		StartInfo startInfo = new StartInfo();
 		startInfo.setTotal(setting.getTotal());
@@ -58,7 +58,7 @@ public class GM {
 	public static void move(String id, XY xy) {
 		int index = Arrays.asList(playerId).indexOf(id);
 
-		if (!rule.isYourTurn(index)) { return; }	//TODO 炸 exception？
+		if (!rule.isYourTurn(id)) { return; }	//TODO 炸 exception？
 
 		rule.shoot(index, xy);
 		eventBus.fireEvent(rule.isEnd() ? new GameEndEvent(rule.getGameInfo()) : new GameMoveEvent(rule.getGameInfo()));

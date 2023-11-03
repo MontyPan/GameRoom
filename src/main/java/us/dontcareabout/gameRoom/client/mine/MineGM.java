@@ -1,11 +1,13 @@
 package us.dontcareabout.gameRoom.client.mine;
 
+import java.util.List;
 import java.util.Random;
 
+import us.dontcareabout.gameRoom.client.agb.RuleBase;
 import us.dontcareabout.gameRoom.client.mine.vo.GameInfo;
 import us.dontcareabout.gameRoom.client.mine.vo.XY;
 
-public class MineGM {
+public class MineGM extends RuleBase {
 	/**
 	 * {@link #map} 用。還未翻開的格子。
 	 */
@@ -45,11 +47,13 @@ public class MineGM {
 	private int[][] map;
 	private int[] playerHit = new int[2];
 
-	public MineGM() {
-		this(16, 16, 51);
+	public MineGM(List<String> idList) {
+		this(idList, 16, 16, 51);
 	}
 
-	public MineGM(int w, int h, int count) {
+	public MineGM(List<String> idList, int w, int h, int count) {
+		super(idList);
+
 		this.width=w;
 		this.height=h;
 		this.total=count;
@@ -88,10 +92,12 @@ public class MineGM {
 		return result;
 	}
 
-	public boolean isYourTurn(int index) {
-		return nowIndex == index;
+	@Override
+	public boolean isYourTurn(String id) {
+		return playerList.get(nowIndex).equals(id);
 	}
 
+	@Override
 	public boolean isEnd() {
 		return playerHit[0] >= total / 2.0 || playerHit[1] >= total / 2.0;
 	}
