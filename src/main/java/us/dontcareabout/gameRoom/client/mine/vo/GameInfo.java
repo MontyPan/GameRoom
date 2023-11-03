@@ -9,10 +9,9 @@ public class GameInfo {
 	private int remainder;
 
 	/**
-	 * 目前輪到的玩家 index
+	 * 目前輪到的玩家
 	 */
-	//XXX 目前不需要，但是以 AGB 來說應該要開成 List<Integer> 來處理多個玩家均可行動
-	private int nowIndex;
+	private String nowId;
 
 	/**
 	 * 玩家 or Player 可以看到的地圖資訊。
@@ -63,16 +62,16 @@ public class GameInfo {
 		return remainder;
 	}
 
-	public int getNowIndex() {
-		return nowIndex;
+	public String getNowId() {
+		return nowId;
 	}
 
-	public void setNowIndex(int nowIndex) {
-		this.nowIndex = nowIndex;
+	public void setNowId(String nowId) {
+		this.nowId = nowId;
 	}
 
-	public boolean isMyTurn(int myIndex) {
-		return myIndex == nowIndex;
+	public boolean isMyTurn(String id) {
+		return nowId.equals(id);
 	}
 
 	public void setPlayerHit(int[] playerHit) {

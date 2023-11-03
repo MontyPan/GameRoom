@@ -169,7 +169,7 @@ public class MineGM extends RuleBase {
 		result.setMap(copy(map));
 		result.setRemainder(remainder);
 		result.setTotal(total);
-		result.setNowIndex(nowIndex);
+		result.setNowId(playerList.get(nowIndex));
 		result.setPlayerHit(playerHit);
 		return result;
 	}

@@ -1,7 +1,5 @@
 package us.dontcareabout.gameRoom.client.mine.ai;
 
-import java.util.Arrays;
-
 import com.google.gwt.core.client.Scheduler;
 import com.sencha.gxt.core.shared.event.GroupingHandlerRegistration;
 
@@ -16,7 +14,6 @@ public class AiPlayer {
 	private final String aiId;
 	private final JavaAI ai;
 
-	private int index;
 	private GroupingHandlerRegistration hr = new GroupingHandlerRegistration();
 
 	public AiPlayer(JavaAI ai) {
@@ -42,12 +39,10 @@ public class AiPlayer {
 		hr.add(GM.addGameMove(e -> move(GM.copy(e.data))));
 	}
 
-	protected void start(StartInfo data) {
-		index = Arrays.asList(data.getPlayerId()).indexOf(aiId);
-	}
+	protected void start(StartInfo data) {}
 
 	protected void move(GameInfo data) {
-		if (!data.isMyTurn(index)) { return; }
+		if (!data.isMyTurn(aiId)) { return; }
 
 		//用 fixed delay 是為了讓 UX 看起來 一點
 		//但因為 event flow 的關係，至少得弄個 scheduleDeferred()
