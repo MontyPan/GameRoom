@@ -5,6 +5,7 @@ import java.util.Random;
 
 import us.dontcareabout.gameRoom.client.agb.RuleBase;
 import us.dontcareabout.gameRoom.client.mine.vo.GameInfo;
+import us.dontcareabout.gameRoom.client.mine.vo.Result;
 import us.dontcareabout.gameRoom.client.mine.vo.XY;
 
 public class MineGM extends RuleBase {
@@ -102,23 +103,20 @@ public class MineGM extends RuleBase {
 		return playerHit[0] >= total / 2.0 || playerHit[1] >= total / 2.0;
 	}
 
-	/**
-	 * @return 是否命中
-	 */
-	//XXX 不考慮 ConsoleMode 的話，回傳值似乎不必要了...
-	public boolean shoot(int index, XY xy) {
-		//TODO 應該要炸 exception 才合理
-		if (xy.x < 0 || xy.x >= width || xy.y < 0 || xy.y >= height) { return false; }
-		if (map[xy.x][xy.y] != UNKNOW){ return false; }
+	public Result shoot(String id, XY xy) {
+		//不考慮炸 exception 是為了預防效率議題
+		if (!isYourTurn(id)) { return Result.not_your_turn; }
+		if (xy.x < 0 || xy.x >= width || xy.y < 0 || xy.y >= height) { return Result.out_of_bound; }
+		if (map[xy.x][xy.y] != UNKNOW){ return Result.not_unknow; }
 
 		count(xy.x, xy.y);
 
 		//不同人踩到地雷要給不同值
 		if (map[xy.x][xy.y] == IS_MINE) {
 			remainder--;
-			playerHit[index]++;
+			playerHit[nowIndex]++;
 
-			if (index == 1) {
+			if (nowIndex == 1) {
 				//IS_MINE 也代表 player1 的 flag
 				//所以只有 player2 要重給值
 				map[xy.x][xy.y] = P2_FLAG;
@@ -129,7 +127,7 @@ public class MineGM extends RuleBase {
 		if (!result) {
 			nowIndex = (nowIndex + 1) % 2;
 		}
-		return result;
+		return result ? Result.hit : Result.miss;
 	}
 
 	private void count(int hitX, int hitY) {

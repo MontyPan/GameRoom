@@ -7,6 +7,7 @@ import us.dontcareabout.gameRoom.client.mine.MineGM;
 import us.dontcareabout.gameRoom.client.mine.ai.DummyAI;
 import us.dontcareabout.gameRoom.client.mine.ai.JavaAI;
 import us.dontcareabout.gameRoom.client.mine.vo.GameInfo;
+import us.dontcareabout.gameRoom.client.mine.vo.Result;
 import us.dontcareabout.gameRoom.client.mine.vo.XY;
 
 /**
@@ -15,11 +16,12 @@ import us.dontcareabout.gameRoom.client.mine.vo.XY;
  */
 public class ConsoleMode {
 	private static final Scanner scanner = new Scanner(System.in);
+	private static final String playerId = "Player";
 
 	private static JavaAI ai = new DummyAI();
 
 	public static void main(String[] args) {
-		MineGM gm = new MineGM(Arrays.asList("Player", ai.name()));
+		MineGM gm = new MineGM(Arrays.asList(playerId, ai.name()));
 		GameInfo result;
 		XY xy;
 
@@ -35,11 +37,11 @@ public class ConsoleMode {
 					read("x (0~" + (result.getWidth() - 1) + ") : "),
 					read("y (0~" + (result.getHeight() - 1) + ") : ")
 				);
-			} while(gm.shoot(0, xy));
+			} while(gm.shoot(playerId, xy) != Result.miss);
 
 			do {
 				xy = ai.guess(gm.getGameInfo());
-			} while(gm.shoot(1, xy));
+			} while(gm.shoot(ai.name(), xy) == Result.hit);
 
 			//TODO 顯示 Player 踩了哪些
 			System.out.println("\n========================");

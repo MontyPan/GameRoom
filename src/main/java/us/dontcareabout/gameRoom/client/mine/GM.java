@@ -17,6 +17,7 @@ import us.dontcareabout.gameRoom.client.mine.event.GameStartEvent;
 import us.dontcareabout.gameRoom.client.mine.event.GameStartEvent.GameStartHandler;
 import us.dontcareabout.gameRoom.client.mine.ui.BoardView;
 import us.dontcareabout.gameRoom.client.mine.vo.GameInfo;
+import us.dontcareabout.gameRoom.client.mine.vo.Result;
 import us.dontcareabout.gameRoom.client.mine.vo.Setting;
 import us.dontcareabout.gameRoom.client.mine.vo.StartInfo;
 import us.dontcareabout.gameRoom.client.mine.vo.XY;
@@ -55,13 +56,14 @@ public class GM {
 		return eventBus.addHandler(GameStartEvent.TYPE, handler);
 	}
 
-	public static void move(String id, XY xy) {
-		int index = Arrays.asList(playerId).indexOf(id);
+	public static Result move(String id, XY xy) {
+		Result result = rule.shoot(id, xy);
 
-		if (!rule.isYourTurn(id)) { return; }	//TODO 炸 exception？
+		if (result.valid) {
+			eventBus.fireEvent(rule.isEnd() ? new GameEndEvent(rule.getGameInfo()) : new GameMoveEvent(rule.getGameInfo()));
+		}
 
-		rule.shoot(index, xy);
-		eventBus.fireEvent(rule.isEnd() ? new GameEndEvent(rule.getGameInfo()) : new GameMoveEvent(rule.getGameInfo()));
+		return result;
 	}
 
 	public static HandlerRegistration addGameMove(GameMoveHandler handler) {
