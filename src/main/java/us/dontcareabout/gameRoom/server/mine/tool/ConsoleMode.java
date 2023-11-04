@@ -1,21 +1,27 @@
 package us.dontcareabout.gameRoom.server.mine.tool;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 import us.dontcareabout.gameRoom.client.mine.MineGM;
 import us.dontcareabout.gameRoom.client.mine.ai.DummyAI;
 import us.dontcareabout.gameRoom.client.mine.ai.JavaAI;
 import us.dontcareabout.gameRoom.client.mine.vo.GameInfo;
+import us.dontcareabout.gameRoom.client.mine.vo.Result;
 import us.dontcareabout.gameRoom.client.mine.vo.XY;
 
-//FIXME 因為 JavaAI 用了純 GWT 的 code 而無法執行..... Orz
+/**
+ * console mode 的玩家先後順序是寫死的（因為懶），
+ * 但是可以改變 {@link #ai} 的值來設定要用那一個 AI。
+ */
 public class ConsoleMode {
 	private static final Scanner scanner = new Scanner(System.in);
+	private static final String playerId = "Player";
+
+	private static JavaAI ai = new DummyAI();
 
 	public static void main(String[] args) {
-		JavaAI ai = new DummyAI();	//FIXME change your Player here!!
-
-		MineGM gm = new MineGM();
+		MineGM gm = new MineGM(Arrays.asList(playerId, ai.name()));
 		GameInfo result;
 		XY xy;
 
@@ -31,20 +37,17 @@ public class ConsoleMode {
 					read("x (0~" + (result.getWidth() - 1) + ") : "),
 					read("y (0~" + (result.getHeight() - 1) + ") : ")
 				);
-			} while(gm.shoot(0, xy));
+			} while(gm.shoot(playerId, xy) != Result.miss);
 
 			do {
 				xy = ai.guess(gm.getGameInfo());
-			} while(gm.shoot(1, xy));
+			} while(gm.shoot(ai.name(), xy) == Result.hit);
 
-			//顯示 Player 踩了哪些
-			result = gm.getGameInfo();
-			System.out.print("Player : ");
-
+			//TODO 顯示 Player 踩了哪些
 			System.out.println("\n========================");
 		} while(result.getPlayerHit()[1] < (result.getTotal() / 2.0));
 
-		System.out.println("Player win!");
+		System.out.println(ai.name() + " win!");
 		System.exit(0);
 	}
 
@@ -106,7 +109,7 @@ public class ConsoleMode {
 				System.out.print(info.getPlayerHit()[0]);
 				break;
 			case 1:
-				System.out.print("  Player : ");
+				System.out.print("  " + ai.name() + " : ");
 				System.out.print(info.getPlayerHit()[1]);
 				break;
 			case 2:

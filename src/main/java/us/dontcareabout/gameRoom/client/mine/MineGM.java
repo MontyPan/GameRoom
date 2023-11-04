@@ -1,11 +1,14 @@
 package us.dontcareabout.gameRoom.client.mine;
 
+import java.util.List;
 import java.util.Random;
 
+import us.dontcareabout.gameRoom.client.agb.RuleBase;
 import us.dontcareabout.gameRoom.client.mine.vo.GameInfo;
+import us.dontcareabout.gameRoom.client.mine.vo.Result;
 import us.dontcareabout.gameRoom.client.mine.vo.XY;
 
-public class MineGM {
+public class MineGM extends RuleBase {
 	/**
 	 * {@link #map} 用。還未翻開的格子。
 	 */
@@ -45,11 +48,13 @@ public class MineGM {
 	private int[][] map;
 	private int[] playerHit = new int[2];
 
-	public MineGM() {
-		this(16, 16, 51);
+	public MineGM(List<String> idList) {
+		this(idList, 16, 16, 51);
 	}
 
-	public MineGM(int w, int h, int count) {
+	public MineGM(List<String> idList, int w, int h, int count) {
+		super(idList);
+
 		this.width=w;
 		this.height=h;
 		this.total=count;
@@ -88,31 +93,30 @@ public class MineGM {
 		return result;
 	}
 
-	public boolean isYourTurn(int index) {
-		return nowIndex == index;
+	@Override
+	public boolean isYourTurn(String id) {
+		return playerList.get(nowIndex).equals(id);
 	}
 
+	@Override
 	public boolean isEnd() {
 		return playerHit[0] >= total / 2.0 || playerHit[1] >= total / 2.0;
 	}
 
-	/**
-	 * @return 是否命中
-	 */
-	//XXX 不考慮 ConsoleMode 的話，回傳值似乎不必要了...
-	public boolean shoot(int index, XY xy) {
-		//TODO 應該要炸 exception 才合理
-		if (xy.x < 0 || xy.x >= width || xy.y < 0 || xy.y >= height) { return false; }
-		if (map[xy.x][xy.y] != UNKNOW){ return false; }
+	public Result shoot(String id, XY xy) {
+		//不考慮炸 exception 是為了預防效率議題
+		if (!isYourTurn(id)) { return Result.not_your_turn; }
+		if (xy.x < 0 || xy.x >= width || xy.y < 0 || xy.y >= height) { return Result.out_of_bound; }
+		if (map[xy.x][xy.y] != UNKNOW){ return Result.not_unknow; }
 
 		count(xy.x, xy.y);
 
 		//不同人踩到地雷要給不同值
 		if (map[xy.x][xy.y] == IS_MINE) {
 			remainder--;
-			playerHit[index]++;
+			playerHit[nowIndex]++;
 
-			if (index == 1) {
+			if (nowIndex == 1) {
 				//IS_MINE 也代表 player1 的 flag
 				//所以只有 player2 要重給值
 				map[xy.x][xy.y] = P2_FLAG;
@@ -123,7 +127,7 @@ public class MineGM {
 		if (!result) {
 			nowIndex = (nowIndex + 1) % 2;
 		}
-		return result;
+		return result ? Result.hit : Result.miss;
 	}
 
 	private void count(int hitX, int hitY) {
@@ -160,11 +164,23 @@ public class MineGM {
 
 	public GameInfo getGameInfo() {
 		GameInfo result = new GameInfo();
-		result.setMap(map);	//雖然不應該把 instance 給出去，不過這裡相信 GM 不會亂搞 XD
+		result.setMap(copy(map));
 		result.setRemainder(remainder);
 		result.setTotal(total);
-		result.setNowIndex(nowIndex);
+		result.setNowId(playerList.get(nowIndex));
 		result.setPlayerHit(playerHit);
+		return result;
+	}
+
+	private static int[][] copy(int[][] target) {
+		int[][] result = new int[target.length][];
+		for (int i = 0; i < target.length; i++) {
+			result[i] = new int[target[i].length];
+
+			for (int i2 = 0; i2 < target[i].length; i2++) {
+				result[i][i2] = target[i][i2];
+			}
+		}
 		return result;
 	}
 }
