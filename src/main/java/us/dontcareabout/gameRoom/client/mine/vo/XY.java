@@ -1,12 +1,14 @@
 package us.dontcareabout.gameRoom.client.mine.vo;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class XY {
-	public int x;
-	public int y;
+	public final int x;
+	public final int y;
 
-	XY() {}
-
-	public XY(int x, int y) {
+	@JsonCreator
+	public XY(@JsonProperty("x") int x, @JsonProperty("y") int y) {
 		this.x = x;
 		this.y = y;
 	}
