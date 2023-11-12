@@ -1,7 +1,8 @@
 package us.dontcareabout.gameRoom.server.mine.tool;
 
+import static us.dontcareabout.gameRoom.console.util.Input.$int;
+
 import java.util.Arrays;
-import java.util.Scanner;
 
 import us.dontcareabout.gameRoom.client.mine.MineGM;
 import us.dontcareabout.gameRoom.client.mine.ai.DummyAI;
@@ -14,8 +15,8 @@ import us.dontcareabout.gameRoom.client.mine.vo.XY;
  * console mode 的玩家先後順序是寫死的（因為懶），
  * 但是可以改變 {@link #ai} 的值來設定要用那一個 AI。
  */
+//Refactory 如果有辦法提煉出 console 的共用架構，改寫的時候改放到 /console 底下
 public class ConsoleMode {
-	private static final Scanner scanner = new Scanner(System.in);
 	private static final String playerId = "Player";
 
 	private static JavaAI ai = new DummyAI();
@@ -34,8 +35,8 @@ public class ConsoleMode {
 				}
 				show(result);
 				xy = new XY(
-					read("x (0~" + (result.getWidth() - 1) + ") : "),
-					read("y (0~" + (result.getHeight() - 1) + ") : ")
+					$int("x (0~" + (result.getWidth() - 1) + ") : "),
+					$int("y (0~" + (result.getHeight() - 1) + ") : ")
 				);
 			} while(gm.shoot(playerId, xy) != Result.miss);
 
@@ -49,15 +50,6 @@ public class ConsoleMode {
 
 		System.out.println(ai.name() + " win!");
 		System.exit(0);
-	}
-
-	private static int read(String string) {
-		System.out.print(string);
-		try{
-			return scanner.nextInt();
-		}catch(Exception e){
-			return -1;
-		}
 	}
 
 	public static void show(GameInfo info) {
