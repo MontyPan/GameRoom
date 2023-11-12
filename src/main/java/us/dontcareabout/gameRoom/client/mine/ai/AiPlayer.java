@@ -27,13 +27,9 @@ public class AiPlayer {
 		 * 所以如果 ai 去改變 data 的 field 值，就會造成其他 ai / 玩家的錯亂 or 作弊
 		 *
 		 * 把 data 弄成 immutable 當然就沒這些問題
-		 * 但是如果考量到這些 data 在（還是幻想中的）多人連線模式，勢必是 server 給
-		 * 這就會踩到 GwtJackson 在 deserialize 時，class 必須有 setter 的哏
-		 * （雖然這時候 ai 是在 server 上跑... XD）
-		 *
-		 * 在「不管是什麼 mode，能共用的邏輯都得共用」的偉大前提下，
-		 * 不希望多費工弄個 DTO 轉成另外的 immutable class，
-		 * 就變成是在傳給 ai 實做前就 copy 一份來解決這個事情。
+		 * 但如何徹底的 immutable 化就會是一個額外的負擔（而且容易忘記 XD）。
+		 * 反過來要求 / 檢查「ai 實做不能亂搞 data」也不現實，
+		 * 所以變成在傳給 ai 實做前就 copy 一份來解決這個事情。
 		 */
 		//理論上上面 StartInfo 也要搞，只是這邊就懶惰先跳過 XD
 		hr.add(GM.addGameMove(e -> move(GM.copy(e.data))));
