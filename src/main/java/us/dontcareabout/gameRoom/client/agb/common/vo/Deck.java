@@ -25,8 +25,11 @@ public class Deck<T> {
 		return sequence.size();
 	}
 
+	/**
+	 * @return {@link List} 形式的牌堆內容物，對其做任何操作都不會影響原始牌堆資料。
+	 */
 	public List<T> list() {
-		return Collections.unmodifiableList(Lists.reverse(sequence));
+		return Lists.reverse(sequence).stream().collect(Collectors.toList());
 	}
 
 	/** 將一張牌放在牌堆最上面 */
